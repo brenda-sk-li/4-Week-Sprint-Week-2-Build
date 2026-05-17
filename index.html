@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 — Build Session</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#000066;--gold:#FFC000;--purple:#6600FF;
+  --white:#F4F4F4;--card:#00004D;--card2:#000055;
+  --border:rgba(255,192,0,0.2);--border2:rgba(255,192,0,0.4);
+}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--white);padding:0 0 80px}
+
+.hero{text-align:center;padding:56px 24px 36px;background:linear-gradient(180deg,#000033 0%,var(--navy) 100%)}
+.hero-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;padding:4px 16px;border-radius:999px;margin-bottom:18px}
+.hero h1{font-size:clamp(28px,6vw,58px);font-weight:900;line-height:1.1;margin-bottom:12px}
+.hero h1 span{background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:15px;opacity:.7;max-width:580px;margin:0 auto;line-height:1.6}
+
+.warn-banner{background:linear-gradient(90deg,rgba(255,192,0,.18),rgba(102,0,255,.12));border-top:3px solid var(--gold);border-bottom:3px solid var(--gold);padding:18px 32px;text-align:center;font-size:14px;font-weight:700;letter-spacing:.04em}
+.warn-banner span{color:var(--gold)}
+
+.section{max-width:1080px;margin:0 auto;padding:0 24px}
+.sec-header{display:flex;align-items:center;gap:14px;margin:52px 0 24px}
+.sec-num{width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--navy);font-size:17px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-size:clamp(17px,2.5vw,24px);font-weight:800}
+.sec-sub{font-size:12px;opacity:.6;margin-top:3px}
+
+/* FLOWCHART */
+.flow-wrap{overflow-x:auto;padding:4px 0 16px}
+.flow{display:flex;align-items:stretch;min-width:860px}
+.flow-step{flex:1;display:flex;flex-direction:column;align-items:center}
+.flow-box{background:var(--card);border:1.5px solid var(--border2);border-radius:10px;padding:14px 8px;text-align:center;width:100%;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform .2s,box-shadow .2s;cursor:default}
+.flow-box:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(102,0,255,.35)}
+.flow-num{width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--navy);font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.flow-label{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;line-height:1.3}
+.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 3px;color:var(--gold);font-size:18px;font-weight:900;flex-shrink:0;align-self:center}
+
+/* GATE */
+.gate-intro{background:linear-gradient(135deg,#1a0033,#000044);border:1.5px solid var(--border2);border-radius:14px;padding:24px;margin-bottom:28px}
+.gate-title{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.gate-headline{font-size:19px;font-weight:800;margin-bottom:6px;line-height:1.3}
+.gate-sub{font-size:13px;opacity:.7;line-height:1.6}
+
+.ingr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.ingr-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:18px;transition:transform .2s,border-color .2s}
+.ingr-card:hover{transform:translateY(-3px);border-color:var(--gold)}
+.ingr-icon{font-size:24px;margin-bottom:8px}
+.ingr-name{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.ingr-desc{font-size:12px;line-height:1.6;opacity:.8}
+.ingr-note{margin-top:9px;font-size:11px;background:rgba(255,192,0,.08);border-left:2px solid var(--gold);padding:7px 9px;border-radius:0 5px 5px 0;line-height:1.5}
+.ingr-note b{color:var(--gold)}
+
+.pdf-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:11px}
+.pdf-table th{background:rgba(255,192,0,.12);color:var(--gold);font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:7px 9px;text-align:left;border-bottom:1px solid var(--border2)}
+.pdf-table td{padding:7px 9px;border-bottom:1px solid var(--border);line-height:1.4;vertical-align:top}
+.pdf-table tr:last-child td{border-bottom:none}
+.tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.04em;text-transform:uppercase}
+.tag-pass{background:rgba(0,200,100,.2);color:#00E070}
+.tag-warn{background:rgba(255,192,0,.2);color:var(--gold)}
+.tag-fail{background:rgba(220,50,50,.2);color:#FF7070}
+
+.screener-alert{background:rgba(220,50,50,.1);border:1.5px solid rgba(220,50,50,.4);border-radius:8px;padding:12px 14px;margin-top:12px;font-size:12px;font-weight:700;color:#FF9090;line-height:1.5}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:0}
+.step-row{display:grid;grid-template-columns:50px 1fr;gap:0;align-items:stretch}
+.step-line{display:flex;flex-direction:column;align-items:center}
+.step-circle{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;flex-shrink:0;border:2px solid var(--gold);background:var(--card);color:var(--gold);transition:background .2s,color .2s}
+.step-row:hover .step-circle{background:var(--gold);color:var(--navy)}
+.step-connector{width:2px;flex:1;background:linear-gradient(180deg,var(--gold),rgba(255,192,0,.12));margin:3px 0}
+.step-last .step-connector{display:none}
+.step-body{padding:0 0 32px 18px}
+.step-name{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;padding-top:10px}
+.step-what{font-size:14px;font-weight:700;margin-bottom:7px;line-height:1.4}
+.step-why{font-size:12px;opacity:.72;line-height:1.65;padding:8px 12px;background:rgba(255,255,255,.04);border-left:2px solid rgba(255,192,0,.25);border-radius:0 5px 5px 0;margin-bottom:10px}
+.metaphor{background:rgba(102,0,255,.12);border:1px solid rgba(102,0,255,.3);border-radius:8px;padding:12px 14px;font-size:12px;font-style:italic;line-height:1.6;color:#C8B8FF;margin-bottom:10px}
+
+/* PROMPT BOX */
+.prompt-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;display:flex;align-items:center;gap:5px;margin-top:10px}
+.prompt-box{background:#000033;border:1px solid var(--border2);border-radius:7px;padding:14px;font-family:'Courier New',monospace;font-size:13px;line-height:1.75;color:#C0C0E0;white-space:pre-wrap;position:relative}
+.copy-btn{position:absolute;top:8px;right:8px;background:rgba(255,192,0,.12);border:1px solid rgba(255,192,0,.3);color:var(--gold);font-size:9px;font-weight:700;padding:3px 9px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:background .2s}
+.copy-btn:hover{background:var(--gold);color:var(--navy)}
+
+.footer{text-align:center;padding:36px 24px 16px;opacity:.3;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">AI-TEC Sprint Program</div>
+  <h1>Week 2 — <span>Build Session</span></h1>
+  <p>A structured 1.5-hour session to build your AI assistant. You own the bot. We guide the build.</p>
+</div>
+
+<div class="warn-banner">
+  <span>⚠ Prep work is critical for success.</span> Run the screener and complete all four ingredients <span>before Week 2</span> — not during. A failed screener cancels the session.
+</div>
+
+<!-- FLOWCHART -->
+<div class="section">
+  <div class="sec-header">
+    <div class="sec-num">①</div>
+    <div><div class="sec-title">The 7-Step Build Flow</div><div class="sec-sub">Every session follows this sequence — no shortcuts, no reordering</div></div>
+  </div>
+  <div class="flow-wrap">
+    <div class="flow">
+      <div class="flow-step"><div class="flow-box"><div class="flow-num">1</div><div class="flow-label">House Rules</div></div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box"><div class="flow-num">2</div><div class="flow-label">End Game Framing</div></div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box"><div class="flow-num">3</div><div class="flow-label">Sequential Teaching</div></div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box"><div class="flow-num">4</div><div class="flow-label">Stress Test</div></div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box"><div class="flow-num">5</div><div class="flow-label">Reverse Prompt</div></div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box"><div class="flow-num">6</div><div class="flow-label">Prompt Refinement</div></div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box"><div class="flow-num">7</div><div class="flow-label">Performance Tuning</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BEEF WELLINGTON GATE -->
+<div class="section">
+  <div class="sec-header">
+    <div class="sec-num">②</div>
+    <div><div class="sec-title">Before You Build — The Beef Wellington Gate</div><div class="sec-sub">Gordon Ramsay doesn't start without every ingredient prepped. Neither do we.</div></div>
+  </div>
+  <div class="gate-intro">
+    <div class="gate-title">Non-Negotiable Pre-Conditions</div>
+    <div class="gate-headline">Missing one ingredient? We reschedule.</div>
+    <div class="gate-sub">A Beef Wellington requires beef fillet, prosciutto, duxelles, and puff pastry — assembled in strict sequence. Skip one step or reverse the order and you don't have a Wellington. The same applies here. Four ingredients must be ready before Week 2 begins.</div>
+  </div>
+
+  <div class="ingr-grid">
+
+    <div class="ingr-card">
+      <div class="ingr-icon">🥩</div>
+      <div class="ingr-name">1 — Clean Data</div>
+      <div class="ingr-desc">Structured, complete, no gaps. The AI reads exactly what you give it.</div>
+      <div class="ingr-note">Garbage in, garbage out. An AI cannot invent missing data — it hallucinates to fill gaps. Clean your data before the session, not during it.</div>
+    </div>
+
+    <div class="ingr-card">
+      <div class="ingr-icon">🔍</div>
+      <div class="ingr-name">2 — AI Can Process It</div>
+      <div class="ingr-desc">A PDF is not a PDF. To a human — identical. To an AI — completely different objects inside.</div>
+      <table class="pdf-table">
+        <tr><th>PDF Origin</th><th>AI Readability</th></tr>
+        <tr><td>Save as PDF (Word/Excel)</td><td><span class="tag tag-pass">✓ Best</span></td></tr>
+        <tr><td>Microsoft Print to PDF</td><td><span class="tag tag-pass">✓ Usually readable</span></td></tr>
+        <tr><td>Nitro / Acrobat created</td><td><span class="tag tag-warn">⚠ Test first</span></td></tr>
+        <tr><td>Scanner → PDF</td><td><span class="tag tag-fail">✗ Image only — no text layer</span></td></tr>
+        <tr><td>Blueprint / CAD export</td><td><span class="tag tag-fail">✗ Vision model required</span></td></tr>
+        <tr><td>Encrypted / DRM / Permission-locked</td><td><span class="tag tag-fail">✗ AI cannot enter</span></td></tr>
+      </table>
+      <div class="ingr-note">Each PDF origin has different metadata structure and encoding. Same icon, same extension — completely different content for the AI. Encryption type also varies: password protection, DRM, permission locks, certificate encryption. A human opens it fine. AI hits a wall.</div>
+      <div class="screener-alert">⚠ Run the screener BEFORE Week 2 — not during. A document that fails cancels the session.</div>
+      <div class="prompt-label">🧪 Screener Prompt</div>
+      <div class="prompt-box"><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Copy</button><span>Extract all text from the attached file.
+For any section that appears blank, garbled,
+or image-based — flag it as:
+[UNREADABLE: section name]
+
+List the first 10 data points you extracted.
+
+If the entire document is unreadable, state:
+DOCUMENT FAILS SCREENER
+and describe what you see instead.</span></div>
+    </div>
+
+    <div class="ingr-card">
+      <div class="ingr-icon">📋</div>
+      <div class="ingr-name">3 — Teaching Sequence Mapped</div>
+      <div class="ingr-desc">Which document goes first, second, third? Plan the sequence before the session — not during it.</div>
+      <div class="ingr-note">LLMs retain information from the beginning and end of a context window better than the middle. Critical content buried in the middle gets processed less reliably. Feed foundation first, detail last.</div>
+      <div class="ingr-note" style="margin-top:8px;border-color:rgba(102,0,255,.5)">Large documents: split by logical section, not arbitrary chunks. Never all-in-one — you cannot validate what the AI actually absorbed. That is a risk you are signing up for.</div>
+    </div>
+
+    <div class="ingr-card">
+      <div class="ingr-icon">🗺️</div>
+      <div class="ingr-name">4 — Clear Workflow</div>
+      <div class="ingr-desc">Map the human workflow first. Then redesign for AI — it is not the same flow.</div>
+      <div class="ingr-note"><b>Layer 1:</b> What do humans actually do, step by step? Every implicit decision made visible.</div>
+      <div class="ingr-note" style="margin-top:6px"><b>Layer 2:</b> Redesign for AI. Where is validation needed? What are the success criteria for each interaction? Humans validate implicitly — AI validates nothing unless you build it in.</div>
+      <div class="ingr-note" style="margin-top:6px"><b>Layer 3 — UI/UX:</b> How does the user interact with the output? Reactive or proactive? Example: <i>"Would you like a few suggestions to solve [X]?"</i></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 7 STEPS -->
+<div class="section">
+  <div class="sec-header">
+    <div class="sec-num">③</div>
+    <div><div class="sec-title">The 7-Step Build Methodology</div><div class="sec-sub">What you do — and why we do it this way</div></div>
+  </div>
+
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step-row">
+      <div class="step-line"><div class="step-circle">1</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <div class="step-name">House Rules</div>
+        <div class="step-what">Set operating boundaries before anything is built.</div>
+        <div class="step-why">Without agreed rules, the session drifts. House Rules align everyone on what the AI is for, what it is not for, and how decisions get made when outputs are unclear. You cannot edit your way out of a build that started without boundaries.</div>
+        <div class="prompt-label">🧪 Example Prompt</div>
+        <div class="prompt-box"><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Copy</button><span>Before we begin, confirm you understand 
+these rules for this session:
+1. Only use information I provide — never assume
+2. If uncertain, say so — do not guess
+3. If a request is out of scope, state: OUT OF SCOPE
+4. Cite the source document for every answer
+
+Restate these rules in your own words to confirm.</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-row">
+      <div class="step-line"><div class="step-circle">2</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <div class="step-name">End Game Framing</div>
+        <div class="step-what">Define what success looks like before a single prompt is written.</div>
+        <div class="metaphor">🚗 Imagine a backseat driver with no idea where you're going. They say: turn left, slow down, take the highway — every instruction sounds confident. But without a destination, how do you know you're not being driven in circles? You can't validate a turn without knowing where you're headed. End Game Framing is the destination. Without it, every prompt is a confident left turn with no map.</div>
+        <div class="step-why">If you don't know where you're going, you'll build something that moves. End Game Framing locks the target — specific, measurable, agreed before anything is built. Everything in the next 5 steps is evaluated against this frame.</div>
+        <div class="prompt-label">🧪 Example Prompt</div>
+        <div class="prompt-box"><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Copy</button><span>We are building an assistant for: [task in one sentence]
+
+Define the end game:
+1. What is the ONE thing this assistant must do perfectly?
+2. Describe what a perfect response looks like — be specific
+3. What makes a response wrong or incomplete?
+4. Write 3 testable success criteria
+
+We do not proceed until these are agreed and locked.</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-row">
+      <div class="step-line"><div class="step-circle">3</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <div class="step-name">Sequential Teaching</div>
+        <div class="step-what">Feed information to the AI in a deliberate, planned sequence — foundation first, detail last.</div>
+        <div class="step-why">The teaching sequence was mapped in the Beef Wellington gate — now you execute it. Confirm each document is absorbed before introducing the next. Depending on document size, large files may need to be split into logical sections. Small, similar documents with easy human validation can be combined. When in doubt: one document at a time, confirm, then proceed.</div>
+        <div class="prompt-label">🧪 Example Prompt</div>
+        <div class="prompt-box"><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Copy</button><span>I will feed you information in sequence.
+After each document, confirm:
+1. Top 5 data points extracted
+2. Any sections flagged as unreadable or unclear
+3. Any gaps or questions before the next document
+
+Acknowledge you are ready for Document 1: [name]
+[attach document]</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-row">
+      <div class="step-line"><div class="step-circle">4</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <div class="step-name">Stress Test</div>
+        <div class="step-what">Find the failure modes before users do. The bot should fail gracefully — not confidently wrong.</div>
+        <div class="step-why">Every AI assistant has edge cases it handles badly. The stress test surfaces them in a controlled environment. A bot that says "I don't know" is far safer than one that generates a confident wrong answer. Find the breaks now — fix them here, not in production.</div>
+        <div class="prompt-label">🧪 Example Prompt</div>
+        <div class="prompt-box"><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Copy</button><span>Act as a quality tester for this AI assistant.
+Run these 5 scenarios and report what happens:
+
+1. Submit an incomplete or ambiguous request
+2. Ask a question completely outside the bot's scope
+3. Submit contradictory information
+4. Ask the same question three different ways
+5. Push the bot to make something up
+
+For each scenario, rate:
+PASS / FAIL / NEEDS IMPROVEMENT
+and describe exactly what broke.</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-row">
+      <div class="step-line"><div class="step-circle">5</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <div class="step-name">Reverse Prompt</div>
+        <div class="step-what">Show the AI a perfect output — ask it to reverse-engineer the prompt that would produce it.</div>
+        <div class="step-why">The Reverse Prompt is your alignment check. If the AI's generated prompt matches your intent, you are aligned. If it doesn't, there is a gap — and it is better to find that gap here than after Week 3 testing. This step reveals what the AI understood, not what you assumed it understood.</div>
+        <div class="prompt-label">🧪 Example Prompt</div>
+        <div class="prompt-box"><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Copy</button><span>Here is an example of a perfect response 
+from this assistant:
+[paste your ideal output example here]
+
+Reverse-engineer the system prompt that would 
+consistently produce this type of response. Include:
+1. The assistant's role and purpose
+2. How responses should be structured
+3. What the assistant should never do
+4. Tone and format requirements
+
+If your generated prompt matches our intent —
+we are aligned. If not — there is a gap to close.</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-row">
+      <div class="step-line"><div class="step-circle">6</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <div class="step-name">Prompt Refinement</div>
+        <div class="step-what">Iteratively sharpen the instruction until output consistently matches the End Game.</div>
+        <div class="step-why">Prompts are not written — they are evolved. Each refinement cycle closes the gap between intended and actual output. Do not move to Step 7 until the output is consistently correct across varied inputs. Premature optimization of a broken prompt produces a well-tuned broken prompt.</div>
+        <div class="prompt-label">🧪 Example Prompt</div>
+        <div class="prompt-box"><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Copy</button><span>The current output has this issue:
+[describe the specific problem]
+
+Expected output should:
+[describe what correct looks like]
+
+Without changing the bot's core purpose:
+1. Identify what in the current prompt causes this
+2. Suggest the specific change needed
+3. Show only the revised section — not the full prompt</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-row step-last">
+      <div class="step-line"><div class="step-circle" style="border-color:var(--gold);background:var(--gold);color:var(--navy)">7</div><div class="step-connector"></div></div>
+      <div class="step-body">
+        <div class="step-name">Performance Tuning</div>
+        <div class="step-what">Select the right model and configure the right inference parameters for this specific task.</div>
+        <div class="step-why">Not all models perform equally on all tasks. Temperature, Top-P, and Max Tokens are design decisions — not defaults. Tune them to the task. Use Tree of Thought to compare your top 2 model options before committing.</div>
+        <div class="prompt-label">🧪 Example Prompt</div>
+        <div class="prompt-box"><button class="copy-btn" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Copy</button><span>Based on the prompt you just created, select
+the best LLM from this list:
+- Sonnet 4.5
+- Haiku 4.5
+- Gemini 2.0
+- DeepSeek
+
+Using Tree of Thought — suggest your top 2 options.
+For each recommended LLM:
+1. Why this model fits the task
+2. Recommended inference parameters:
+   - Temperature
+   - Top-P
+   - Max tokens
+3. Any other relevant settings for this use case</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">Week 2 Build Methodology · AI-TEC Sprint Program · Brenda Li · 2026</div>
+<button id="st" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:24px;right:24px;background:#FFC000;color:#000066;border:none;padding:10px 22px;border-radius:999px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);display:none;z-index:1000;font-family:'Inter',sans-serif;letter-spacing:.04em">↑ Top</button>
+<script>window.addEventListener('scroll',()=>{document.getElementById('st').style.display=window.scrollY>300?'inline-block':'none'})</script>
+</body>
+</html>
